@@ -212,6 +212,8 @@ enum {
 
     BOOL CURSOR;
     BOOL colorInvertedCursor;
+    
+    BOOL doCommandBySelectorCalled;
 
     // geometry
     double lineHeight;

@@ -2567,6 +2567,7 @@ NSMutableArray* screens=0;
     // Control+Key doesn't work right with custom keyboard layouts. Handle ctrl+key here for the
     // standard combinations.
     BOOL workAroundControlBug = NO;
+#if 0
     if (!prev &&
         (modflag & (NSControlKeyMask | NSCommandKeyMask | NSAlternateKeyMask)) == NSControlKeyMask) {
         if (debugKeyDown) {
@@ -2600,10 +2601,11 @@ NSMutableArray* screens=0;
             }
         }
     }
-
+#endif
     if (!workAroundControlBug) {
         // Let the IME process key events
         IM_INPUT_INSERT = NO;
+        doCommandBySelectorCalled = NO;
         if (debugKeyDown) {
             NSLog(@"PTYTextView keyDown send to IME");
         }
@@ -2612,6 +2614,7 @@ NSMutableArray* screens=0;
         // If the IME didn't want it, pass it on to the delegate
         if (!prev &&
             !IM_INPUT_INSERT &&
+            doCommandBySelectorCalled &&
             ![self hasMarkedText]) {
             if (debugKeyDown) {
                 NSLog(@"PTYTextView keyDown IME no, send to delegate");
@@ -5041,6 +5044,7 @@ static double EuclideanDistance(NSPoint p1, NSPoint p2) {
 /// NSTextInput stuff
 - (void)doCommandBySelector:(SEL)aSelector
 {
+    doCommandBySelectorCalled = YES;
     //NSLog(@"doCommandBySelector:%@", NSStringFromSelector(aSelector));
 
 #if GREED_KEYDOWN == 0
